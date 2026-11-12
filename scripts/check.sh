@@ -25,7 +25,7 @@ for arg in "$@"; do
 Usage: ./scripts/check.sh [OPTIONS]
 
 Options:
-  --full           Run comprehensive checks (sync, build, tests)
+  --full           Run comprehensive checks (locked sync, full build, tests)
   --backend-only   Run only backend checks
   --frontend-only  Run only frontend checks
   -h, --help       Show this help message
@@ -48,7 +48,6 @@ cd "$REPO_ROOT"
 echo "=== GraphRAG-DLP Quality Checks (mode: $MODE) ==="
 START_TIME=$(date +%s)
 
-# Track check counts and skipped status
 CHECK_COUNT=0
 
 # --- Backend Checks ---
@@ -68,8 +67,13 @@ if [ "$RUN_BACKEND" = true ]; then
   fi
 
   if [ "$MODE" = "full" ]; then
-    echo "[backend] Synchronizing dependencies with test extra (uv sync --extra test)..."
-    uv sync --extra test
+    if [ ! -f "uv.lock" ]; then
+      echo "[backend] ERROR: uv.lock not found in repository root." >&2
+      echo "          Action required: Run 'uv lock' to generate reproducible lockfile." >&2
+      exit 1
+    fi
+    echo "[backend] Synchronizing dependencies with test extra (uv sync --locked --extra test)..."
+    uv sync --locked --extra test
   fi
 
   echo "[backend] Checking Python syntax across backend..."
@@ -83,7 +87,6 @@ if [ "$RUN_BACKEND" = true ]; then
   fi
 
   echo "[backend] Running pytest (serial, bounded)..."
-  # Run pytest with serial execution; fail if tests fail.
   uv run pytest -v -o "addopts=" --override-ini="addopts="
   CHECK_COUNT=$((CHECK_COUNT + 1))
   echo "[backend] Pytest: PASS"
@@ -99,6 +102,12 @@ if [ "$RUN_FRONTEND" = true ]; then
     exit 1
   fi
 
+  if [ ! -f "frontend/package-lock.json" ]; then
+    echo "[frontend] ERROR: frontend/package-lock.json not found." >&2
+    echo "           Action required: frontend must provide reproducible package-lock.json." >&2
+    exit 1
+  fi
+
   if ! command -v npm >/dev/null 2>&1 || ! command -v node >/dev/null 2>&1; then
     echo "[frontend] ERROR: Node.js or npm is not installed or not in PATH." >&2
     echo "           Action required: Install Node.js LTS (brew install node)." >&2
@@ -106,13 +115,8 @@ if [ "$RUN_FRONTEND" = true ]; then
   fi
 
   if [ ! -d "frontend/node_modules" ] || [ "$MODE" = "full" ]; then
-    if [ -f "frontend/package-lock.json" ]; then
-      echo "[frontend] Installing reproducible dependencies via 'npm ci'..."
-      (cd frontend && npm ci)
-    else
-      echo "[frontend] Installing dependencies via 'npm install'..."
-      (cd frontend && npm install)
-    fi
+    echo "[frontend] Installing reproducible dependencies via 'npm ci'..."
+    (cd frontend && npm ci)
   fi
 
   # Typecheck / Build

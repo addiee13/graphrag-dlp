@@ -34,15 +34,19 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Verify pyproject.toml exists
+      - name: Verify backend configuration and lockfile
         run: |
           if [ ! -f "pyproject.toml" ]; then
             echo "ERROR: pyproject.toml not found in repository root." >&2
             exit 1
           fi
+          if [ ! -f "uv.lock" ]; then
+            echo "ERROR: uv.lock not found in repository root. Lockfile required for reproducible CI." >&2
+            exit 1
+          fi
 
-      - name: Install dependencies (reproducible with test extra)
-        run: uv sync --extra test --frozen || uv sync --extra test
+      - name: Install dependencies (uv sync --locked --extra test)
+        run: uv sync --locked --extra test
 
       - name: Python syntax check
         run: python3 -m compileall -q backend/
@@ -67,10 +71,14 @@ jobs:
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Verify frontend package.json exists
+      - name: Verify frontend configuration and lockfile
         run: |
           if [ ! -f "frontend/package.json" ]; then
             echo "ERROR: frontend/package.json not found." >&2
+            exit 1
+          fi
+          if [ ! -f "frontend/package-lock.json" ]; then
+            echo "ERROR: frontend/package-lock.json not found. Strict lockfile required for reproducible CI." >&2
             exit 1
           fi
 
