@@ -25,15 +25,15 @@ help:
 
 install:
 	@if command -v uv >/dev/null 2>&1; then \
-		echo "Installing Python dependencies with uv..."; \
-		uv sync; \
+		echo "Installing Python dependencies with uv (locked)..."; \
+		uv sync --locked --extra test; \
 	else \
 		echo "Installing Python dependencies with pip..."; \
 		$(PYTHON) -m pip install -e .; \
 	fi
 	@if [ -d "frontend" ]; then \
-		echo "Installing frontend dependencies with npm..."; \
-		(cd frontend && npm install); \
+		echo "Installing frontend dependencies with npm (ci)..."; \
+		(cd frontend && npm ci); \
 	fi
 
 dev:

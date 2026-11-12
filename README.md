@@ -59,17 +59,16 @@
 * [uv](https://github.com/astral-sh/uv) (recommended) or standard `pip`
 * Docker and Docker Compose (for containerized deployments)
 
-### 1. Installation
+### 1. Installation & Bootstrap
 
-Clone the repository and install dependencies:
+Clone the repository and install locked dependencies:
 
 ```bash
-# Using Makefile
-make install
+# Complete one-line bootstrap for backend + frontend + production build:
+uv sync --locked --extra test && npm --prefix frontend ci && npm --prefix frontend run build && ./scripts/start.sh
 
-# Or manually:
-uv sync
-cd frontend && npm install && cd ..
+# Or using Makefile:
+make install
 ```
 
 ### 2. Local Development (Dual-Process with Hot Reload)
