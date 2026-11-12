@@ -34,12 +34,15 @@ yarn-error.log*
 .env.*.local
 *.key
 
-# Application Data & SQLite DBs
+# Application Data, SQLite DBs & Model Caches
 *.sqlite3
 *.sqlite3*
 backend/data/*.sqlite3*
 backend/data/*.key
 data/
+models/
+modelcache/
+.cache/
 
 # Neo4j & Container runtime mounts
 neo4j/

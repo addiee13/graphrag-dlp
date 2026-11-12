@@ -164,12 +164,16 @@ cp .env.example .env
 | `JWT_ISSUER` | `graphrag-dlp-demo` | Expected JWT issuer claim. |
 | `JWT_AUDIENCE` | `graphrag-dlp` | Expected JWT audience claim. |
 | `JWT_JWKS_URL` | *(empty)* | HTTPS URL for production JWKS key set (required if `APP_ENV=production`). |
-| `NEO4J_URI` | *(empty)* | Neo4j Bolt connection URI (e.g. `bolt://127.0.0.1:7687`). |
-| `NEO4J_USER` | `neo4j` | Neo4j username. |
-| `NEO4J_PASSWORD` | `graphrag_password_local` | Neo4j password. |
+| `NEO4J_URI` | *(empty)* | Neo4j Bolt connection URI (e.g. `bolt://127.0.0.1:7687`). Unset by default for zero-key local operation. |
+| `NEO4J_USER` | `neo4j` | Neo4j read user. |
+| `NEO4J_PASSWORD` | `graphrag_password_local` | Neo4j read password. |
+| `NEO4J_DATABASE` | `neo4j` | Neo4j database name. |
+| `NEO4J_WRITE_USER` | *(empty)* | Separate Neo4j write principal for initial graph fixture provisioning and ingest. |
+| `NEO4J_WRITE_PASSWORD` | *(empty)* | Separate Neo4j write password. |
+| `DLP_LANGGRAPH` | `0` | Enable optional LangGraph StateGraph orchestration (`1` to enable, requires `--extra providers`). |
 | `GROQ_API_KEY` | *(empty)* | Optional API key for Groq LLM answers. Unset by default. |
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | Supported Groq model (`llama-3.3-70b-versatile` or `llama-3.1-8b-instant`). |
-| `FLASHRANK_MODEL_DIR` | *(empty)* | Path to local directory containing pre-downloaded ONNX models. |
+| `FLASHRANK_MODEL_DIR` | *(empty)* | Path to local directory containing pre-downloaded ONNX models. Provision using `python3 backend/scripts/provision_flashrank.py --cache-dir models/flashrank`. |
 
 ---
 
