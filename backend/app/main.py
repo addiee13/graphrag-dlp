@@ -149,7 +149,7 @@ def create_app(settings=None):
     def hybrid(body: Search, claims=Depends(current)):
         audit(claims, "search", body.query)
         results = retrieve(claims, body.query, body.top_k)
-        return dict(results=results, total_hits=len(results), vector_mode="sparse_tfidf_cosine", reranker="lexical_rrf")
+        return dict(results=results, total_hits=len(results), vector_mode="sparse_tfidf_cosine", reranker="flashrank" if ranker else "lexical_rrf")
     @app.get("/api/v1/graph/subgraph")
     def graph(entity_id: str | None = None, max_depth: int = Query(default=2, ge=0, le=3), claims=Depends(current)):
         audit(claims, "graph")

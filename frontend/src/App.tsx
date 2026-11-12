@@ -1263,6 +1263,7 @@ function Ingestion({
     document_id: string;
     content_hash: string;
     chunks_created: number;
+    graph_indexing?: string;
   } | null>(null);
   const [sourceId, setSourceId] = useState<string | null>(null);
   const newRequest = useRequests();
@@ -1278,6 +1279,7 @@ function Ingestion({
         document_id: string;
         content_hash: string;
         chunks_created: number;
+        graph_indexing?: string;
       }>("/ingest", {
         token: session.access_token,
         signal: controller.signal,
@@ -1403,8 +1405,20 @@ function Ingestion({
             <div className="ingest-success" role="status">
               <CheckCheck size={21} />
               <div>
-                <strong>Document added</strong>
-                <p>{result.chunks_created} chunks created by the API.</p>
+                <strong>
+                  {result.graph_indexing === "pending"
+                    ? "Document stored, graph indexing pending"
+                    : "Document added"}
+                </strong>
+                {result.graph_indexing === "pending" ? (
+                  <p>
+                    Document is stored, but graph indexing is pending and not
+                    searchable yet. Retries occur on configured service restart
+                    or next ingestion; consult docs/RUNBOOK.md.
+                  </p>
+                ) : (
+                  <p>{result.chunks_created} chunks created by the API.</p>
+                )}
                 <button
                   type="button"
                   className="text-button"

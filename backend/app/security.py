@@ -48,6 +48,8 @@ class Settings:
     db_path: str = field(default_factory=lambda: os.getenv("DLP_DB_PATH", "backend/data/graph.sqlite3"))
 
     def __post_init__(self):
+        if self.mode not in ("demo", "production"):
+            raise RuntimeError(f"Invalid mode {self.mode!r}: must be 'demo' or 'production'")
         if self.secret:
             if len(self.secret) < 32:
                 raise RuntimeError("JWT_SECRET must contain at least 32 characters")

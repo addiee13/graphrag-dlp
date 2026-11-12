@@ -277,3 +277,27 @@ def test_indexing_failure_persists_pending_without_claiming_success(client, monk
 def test_huge_or_nonfinite_literals_fail_safely(client):
     for value in ("9" * 5000, "1e999"):
         assert query(client, f"MATCH (n) WHERE n.classification_level = {value} RETURN n.name").status_code == 400
+
+def test_unknown_settings_mode_rejected(monkeypatch):
+    with pytest.raises(RuntimeError):
+        Settings(mode="prod")
+    with pytest.raises(RuntimeError):
+        Settings(mode="staging")
+    monkeypatch.setenv("APP_ENV", "prod")
+    with pytest.raises(RuntimeError):
+        create_app()
+
+def test_hybrid_search_reranker_reports_active_flashrank(monkeypatch):
+    from backend.app import adapters
+    class MockRanker:
+        def __init__(self, model_dir): pass
+        def rerank(self, query, results): return results
+    monkeypatch.setattr(adapters, "FlashRankAdapter", MockRanker)
+    monkeypatch.setenv("FLASHRANK_MODEL_DIR", "/mock/model/dir")
+    c = TestClient(create_app(Settings(db_path=":memory:")))
+    h = headers(c, "vp")
+    res = c.post("/api/v1/search/hybrid", headers=h, json={"query": "Chimera"})
+    assert res.status_code == 200
+    assert res.json()["reranker"] == "flashrank"
+    assert c.get("/api/v1/health").json()["adapters"]["reranker"] == "flashrank"
+

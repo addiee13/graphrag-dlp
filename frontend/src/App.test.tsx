@@ -335,4 +335,41 @@ describe("secure workspace", () => {
       extract_entities: true,
     });
   });
+
+  it("shows stored with graph indexing pending when indexing is pending", async () => {
+    const user = await connect();
+    const original = fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementation((url: string, init: RequestInit) =>
+      url.endsWith("/ingest")
+        ? json(
+            {
+              graph_indexing: "pending",
+              document_id: "pending-doc",
+              content_hash: "fixture-hash",
+              chunks_created: 1,
+            },
+            201,
+          )
+        : original(url, init),
+    );
+    await user.click(screen.getByRole("button", { name: "Add knowledge" }));
+    await user.type(screen.getByLabelText("Document title"), "Pending fixture");
+    await user.type(
+      screen.getByLabelText("Document content"),
+      "Pending fixture text",
+    );
+    await user.click(screen.getByRole("button", { name: "Add document" }));
+    await screen.findByText("Document stored, graph indexing pending");
+    expect(screen.queryByText("Document added")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /graph indexing is pending and not searchable yet/i,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /docs\/RUNBOOK\.md/i,
+      ),
+    ).toBeInTheDocument();
+  });
 });
