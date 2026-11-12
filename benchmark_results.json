@@ -1,0 +1,1593 @@
+{
+  "meta": {
+    "timestamp": 1794473988.1092649,
+    "base_url": "http://127.0.0.1:8000",
+    "server_health": {
+      "status": "healthy",
+      "version": "1.0.0",
+      "mode": "deterministic_local",
+      "auth_enforced": true,
+      "adapters": {
+        "graph_store": "sqlite_persistent",
+        "llm_engine": "deterministic_extractive",
+        "vector_engine": "local_sparse_tfidf_cosine",
+        "reranker": "lexical_rrf",
+        "neo4j_connected": false,
+        "neo4j_ingest_indexing": "local",
+        "groq_connected": false,
+        "langgraph": "disabled",
+        "flashrank": "disabled_model_not_provisioned"
+      }
+    }
+  },
+  "ingestion": {
+    "total_documents_ingested": 66,
+    "total_chunks_created": 66,
+    "total_nodes_created": 64,
+    "total_edges_created": 40,
+    "total_duration_sec": 0.34,
+    "throughput_docs_per_sec": 194.2,
+    "latency_ms": {
+      "count": 66,
+      "min": 3.28,
+      "mean": 5.138,
+      "p50": 3.887,
+      "p90": 8.094,
+      "p99": 9.815,
+      "max": 10.068,
+      "stdev": 2.009
+    },
+    "records": [
+      {
+        "alias": "doc_eng_l1_01",
+        "doc_id": "doc_5fd9cdb653f349479565bdc8273a4cc9",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 9.68,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l1_02",
+        "doc_id": "doc_3784043a9a6842f5ab7fb5fba8553f22",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 7.94,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l1_03",
+        "doc_id": "doc_75edcc70c480449a85411d1e6d51daea",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 4.03,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l1_04",
+        "doc_id": "doc_5d61a6ff0bbc4cffa2c265249efce65b",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 3.28,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l2_01",
+        "doc_id": "doc_4c673100010a4ab7b6838a5eb399dc94",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "engineering",
+        "latency_ms": 7.19,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l2_02",
+        "doc_id": "doc_adc429742d224df788d3037c6bb90720",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "engineering",
+        "latency_ms": 7.2,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l2_03",
+        "doc_id": "doc_0a5aa60e83dc41fdb087997e8b8c022e",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "engineering",
+        "latency_ms": 3.29,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l2_04",
+        "doc_id": "doc_b1a54d9a8d6f4371aacd01e45c88bc7c",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "engineering",
+        "latency_ms": 3.33,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l3_01",
+        "doc_id": "doc_25f85cad745a4a1b8a1aa9a672c089c4",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "engineering",
+        "latency_ms": 7.32,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l3_02",
+        "doc_id": "doc_1be5f1b50dba49f49a11499c14381a11",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "engineering",
+        "latency_ms": 7.46,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l3_03",
+        "doc_id": "doc_038bae6851014855937898a9c536bcc6",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "engineering",
+        "latency_ms": 4.55,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l3_04",
+        "doc_id": "doc_7aa4bd2e80f04b519783af1a6fefa220",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "engineering",
+        "latency_ms": 4.44,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l4_01",
+        "doc_id": "doc_950b416a3c244b26a4847484433188ca",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "engineering",
+        "latency_ms": 7.59,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l4_02",
+        "doc_id": "doc_8b4b27066cf54e40aec773a3127d6e23",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "engineering",
+        "latency_ms": 7.7,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_eng_l4_03",
+        "doc_id": "doc_9c2cc382babe42e7b90f57edd6e3da15",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "engineering",
+        "latency_ms": 3.63,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_eng_l4_04",
+        "doc_id": "doc_ac845abd1b5645d1b8f8bc0193bac81b",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "engineering",
+        "latency_ms": 3.46,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l1_01",
+        "doc_id": "doc_fadeb35548ec4c59935c0c358564af49",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "procurement",
+        "latency_ms": 3.29,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l1_02",
+        "doc_id": "doc_bd98c31d094a43859d53b11b6d00ad3a",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "procurement",
+        "latency_ms": 3.29,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l1_03",
+        "doc_id": "doc_06140f3de8ef4785badd1f028aeb1177",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "procurement",
+        "latency_ms": 5.31,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_proc_l1_04",
+        "doc_id": "doc_c188b1804beb49dc9a8e83518f97c7fa",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "procurement",
+        "latency_ms": 3.59,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l2_01",
+        "doc_id": "doc_e0728c2b3acb47819c1f11cc2d87ea32",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "procurement",
+        "latency_ms": 5.65,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_proc_l2_02",
+        "doc_id": "doc_ec4b4fbc09184899aaa74145e0d6e0b9",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "procurement",
+        "latency_ms": 3.43,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l2_03",
+        "doc_id": "doc_17b9f02b127e4cd3895acee168fcf3a9",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "procurement",
+        "latency_ms": 5.6,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_proc_l2_04",
+        "doc_id": "doc_d90bd2c9f4a840389d564816d655083f",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "procurement",
+        "latency_ms": 3.53,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l3_01",
+        "doc_id": "doc_f83770ecdcfe4f86b6fd7be12b4d6abc",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "procurement",
+        "latency_ms": 5.45,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_proc_l3_02",
+        "doc_id": "doc_ba69e8169a0b4cb3a73fa53b44c2ac73",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "procurement",
+        "latency_ms": 5.54,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_proc_l3_03",
+        "doc_id": "doc_83e4bf89c9554cb29ea5a76928269d79",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "procurement",
+        "latency_ms": 5.56,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_proc_l3_04",
+        "doc_id": "doc_e465af894bef46519841aed9909766c4",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "procurement",
+        "latency_ms": 4.07,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l4_01",
+        "doc_id": "doc_5d02dc044dcd41dc8ece207246e6f1da",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.87,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l4_02",
+        "doc_id": "doc_f374b4596ecf4c7fbf0ca69bd29853f4",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.56,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l4_03",
+        "doc_id": "doc_3ee45beee24844978adf402740841bd9",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.59,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_proc_l4_04",
+        "doc_id": "doc_c604b870e32a4ff797504fcb9098aedd",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.44,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l1_01",
+        "doc_id": "doc_b5bc907f57414f059afd9c13b86fdd22",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "mna",
+        "latency_ms": 3.53,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l1_02",
+        "doc_id": "doc_1d3cf07f0484414480aca8ae952af708",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "mna",
+        "latency_ms": 3.8,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l1_03",
+        "doc_id": "doc_2d379660724f4c4db9576bafbb950995",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "mna",
+        "latency_ms": 3.53,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l1_04",
+        "doc_id": "doc_3adf26c0d69549cbb1c8686fb28c5b97",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "mna",
+        "latency_ms": 3.54,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l2_01",
+        "doc_id": "doc_1a2bdc425d9f45eeaf36f130ff307257",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "mna",
+        "latency_ms": 3.48,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l2_02",
+        "doc_id": "doc_bc60ddf873b541dca7904278584b854e",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "mna",
+        "latency_ms": 3.46,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l2_03",
+        "doc_id": "doc_a7901f5a6edd4301aa8215a30c98920b",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "mna",
+        "latency_ms": 3.89,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l2_04",
+        "doc_id": "doc_93d1bc0c2a7142fd965dac78459e564a",
+        "tenant": "acme",
+        "level": 2,
+        "dept": "mna",
+        "latency_ms": 3.69,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l3_01",
+        "doc_id": "doc_ded145819df445bcb6d658c69476ad94",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "mna",
+        "latency_ms": 8.03,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_mna_l3_02",
+        "doc_id": "doc_744f6955eb1d44e1b482cfada423632f",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "mna",
+        "latency_ms": 7.9,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_mna_l3_03",
+        "doc_id": "doc_10fad738b1f94408bf4a281eb3f860b6",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "mna",
+        "latency_ms": 8.77,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_mna_l3_04",
+        "doc_id": "doc_b3c6b3f4854240889ca687f48c890bf2",
+        "tenant": "acme",
+        "level": 3,
+        "dept": "mna",
+        "latency_ms": 8.4,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_mna_l4_01",
+        "doc_id": "doc_06ce039a143a4938ac75549c773bcdc2",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "mna",
+        "latency_ms": 3.66,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l4_02",
+        "doc_id": "doc_0108ead41b8c4156977a0aa3a6fc108c",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "mna",
+        "latency_ms": 3.69,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l4_03",
+        "doc_id": "doc_4a5391d0a0f4476e88d9d47f8804bd70",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "mna",
+        "latency_ms": 3.87,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_mna_l4_04",
+        "doc_id": "doc_15ce24dded6e437e9ba2844a175b5225",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "mna",
+        "latency_ms": 3.65,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_other_eng_l1",
+        "doc_id": "doc_af64607a20ad419d97929bcebc787ec4",
+        "tenant": "other",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 8.11,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_other_eng_l2",
+        "doc_id": "doc_4f899817888545cda4a73c82f1c3cdad",
+        "tenant": "other",
+        "level": 2,
+        "dept": "engineering",
+        "latency_ms": 7.75,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_other_eng_l3",
+        "doc_id": "doc_1ee45c4a24e64d09a6c8511f779863af",
+        "tenant": "other",
+        "level": 3,
+        "dept": "engineering",
+        "latency_ms": 8.08,
+        "nodes_created": 1,
+        "edges_created": 2
+      },
+      {
+        "alias": "doc_other_eng_l4",
+        "doc_id": "doc_28176fa5c7054e2098ddb8b2481d5c8a",
+        "tenant": "other",
+        "level": 4,
+        "dept": "engineering",
+        "latency_ms": 3.78,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_other_proc_l1",
+        "doc_id": "doc_28d2f7a0af524ca9afd4e9ce7ed752b4",
+        "tenant": "other",
+        "level": 1,
+        "dept": "procurement",
+        "latency_ms": 3.96,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_other_proc_l2",
+        "doc_id": "doc_a4201906a3364868b17e92e2c692104d",
+        "tenant": "other",
+        "level": 2,
+        "dept": "procurement",
+        "latency_ms": 6.62,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_other_proc_l3",
+        "doc_id": "doc_25d259bf39954871b405d3949ecfb2c5",
+        "tenant": "other",
+        "level": 3,
+        "dept": "procurement",
+        "latency_ms": 6.35,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_other_proc_l4",
+        "doc_id": "doc_f8236d9ad7b442849b02ae4fc61dec4e",
+        "tenant": "other",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.88,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_other_mna_l1",
+        "doc_id": "doc_944379f2f79e48dbbb703c955a6526a8",
+        "tenant": "other",
+        "level": 1,
+        "dept": "mna",
+        "latency_ms": 3.64,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_other_mna_l2",
+        "doc_id": "doc_ea9b932130334d04bc3835d059f61cfc",
+        "tenant": "other",
+        "level": 2,
+        "dept": "mna",
+        "latency_ms": 3.75,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_other_mna_l3",
+        "doc_id": "doc_210035b484ee4b25b834b5b3c8d03d12",
+        "tenant": "other",
+        "level": 3,
+        "dept": "mna",
+        "latency_ms": 8.57,
+        "nodes_created": 1,
+        "edges_created": 1
+      },
+      {
+        "alias": "doc_other_mna_l4",
+        "doc_id": "doc_8d5b4bdb79db46cc87d6a360abaf3424",
+        "tenant": "other",
+        "level": 4,
+        "dept": "mna",
+        "latency_ms": 4.33,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_adv_prompt_injection",
+        "doc_id": "doc_3617ecbc3b8244a6b9f339380f12fe6e",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 3.78,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_adv_canary_override",
+        "doc_id": "doc_4946abfb4883445a9ef9dc99558b5a2b",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 3.66,
+        "nodes_created": 1,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_adv_leetspeak_terms",
+        "doc_id": "doc_e22a99573e6442349ae7bf6d88ed709f",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.39,
+        "nodes_created": 0,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_adv_permuted_syntax",
+        "doc_id": "doc_cde62503179f42c59ce921018e1b9453",
+        "tenant": "acme",
+        "level": 4,
+        "dept": "procurement",
+        "latency_ms": 3.47,
+        "nodes_created": 0,
+        "edges_created": 0
+      },
+      {
+        "alias": "doc_adv_relational_noise",
+        "doc_id": "doc_87f0ffadf8074335919f9eed12ef0e39",
+        "tenant": "acme",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 10.07,
+        "nodes_created": 1,
+        "edges_created": 3
+      },
+      {
+        "alias": "doc_adv_cross_tenant_spoof",
+        "doc_id": "doc_2b06cb310255484898b8ba4271788fb1",
+        "tenant": "other",
+        "level": 1,
+        "dept": "engineering",
+        "latency_ms": 8.14,
+        "nodes_created": 1,
+        "edges_created": 2
+      }
+    ]
+  },
+  "security": {
+    "total_probes": 21,
+    "passed_probes": 21,
+    "failed_probes": 0,
+    "leakage_rate_pct": 0.0,
+    "anti_oracle_integrity_pct": 100.0,
+    "ast_rejection_rate_pct": 100.0,
+    "cross_tenant_isolation_pct": 100.0,
+    "probes": [
+      {
+        "probe_id": "sec_contractor_probe_l4_terms_search",
+        "probe_type": "cross_clearance",
+        "persona": "contractor",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 8.09,
+        "description": "Contractor must not retrieve Level 4 procurement payment terms via hybrid search."
+      },
+      {
+        "probe_id": "sec_contractor_probe_l4_terms_chat",
+        "probe_type": "cross_clearance",
+        "persona": "contractor",
+        "endpoint": "/api/v1/chat",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 36.2,
+        "description": "Contractor chat must not disclose Level 4 payment terms."
+      },
+      {
+        "probe_id": "sec_contractor_probe_l3_mna_search",
+        "probe_type": "cross_clearance",
+        "persona": "contractor",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 7.71,
+        "description": "Contractor must not retrieve Level 3/4 M&A acquisition data."
+      },
+      {
+        "probe_id": "sec_engineer_probe_l3_crypto_search",
+        "probe_type": "cross_clearance",
+        "persona": "engineer",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 10.53,
+        "description": "Engineer (L2) must not retrieve Level 3 engineering PKI documents."
+      },
+      {
+        "probe_id": "sec_engineer_probe_l4_terms_chat",
+        "probe_type": "cross_clearance",
+        "persona": "engineer",
+        "endpoint": "/api/v1/chat",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 39.76,
+        "description": "Engineer chat must not leak Level 4 procurement terms."
+      },
+      {
+        "probe_id": "sec_vp_probe_other_tenant_canary",
+        "probe_type": "cross_tenant",
+        "persona": "vp",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 24.5,
+        "description": "VP (acme tenant) must never retrieve other tenant canary data."
+      },
+      {
+        "probe_id": "sec_contractor_probe_other_tenant_project",
+        "probe_type": "cross_tenant",
+        "persona": "contractor",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 7.9,
+        "description": "Contractor must never retrieve other tenant project documents."
+      },
+      {
+        "probe_id": "sec_other_tenant_probe_acme_apollo",
+        "probe_type": "cross_tenant",
+        "persona": "other_tenant",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 8.29,
+        "description": "Other tenant must never retrieve ACME documents, even public/Level 1."
+      },
+      {
+        "probe_id": "sec_anti_oracle_contractor_l4_doc",
+        "probe_type": "anti_oracle_404",
+        "persona": "contractor",
+        "endpoint": "/api/v1/sources/doc_5d02dc044dcd41dc8ece207246e6f1da",
+        "expected_status": 404,
+        "actual_status": 404,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 3.4,
+        "description": "Contractor requesting Level 4 source must receive uniform 404 without oracle leakage."
+      },
+      {
+        "probe_id": "sec_anti_oracle_engineer_l3_doc",
+        "probe_type": "anti_oracle_404",
+        "persona": "engineer",
+        "endpoint": "/api/v1/sources/doc_25f85cad745a4a1b8a1aa9a672c089c4",
+        "expected_status": 404,
+        "actual_status": 404,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 3.24,
+        "description": "Engineer requesting Level 3 source must receive uniform 404."
+      },
+      {
+        "probe_id": "sec_anti_oracle_vp_other_tenant_doc",
+        "probe_type": "anti_oracle_404",
+        "persona": "vp",
+        "endpoint": "/api/v1/sources/doc_28176fa5c7054e2098ddb8b2481d5c8a",
+        "expected_status": 404,
+        "actual_status": 404,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 3.93,
+        "description": "VP requesting other tenant source must receive uniform 404."
+      },
+      {
+        "probe_id": "sec_prompt_injection_chat_override",
+        "probe_type": "prompt_injection",
+        "persona": "contractor",
+        "endpoint": "/api/v1/chat",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 37.74,
+        "description": "Direct instruction injection in chat query must fail to bypass ABAC filtering."
+      },
+      {
+        "probe_id": "sec_prompt_injection_hybrid_override",
+        "probe_type": "prompt_injection",
+        "persona": "contractor",
+        "endpoint": "/api/v1/search/hybrid",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 8.82,
+        "description": "Direct policy injection in hybrid search must fail to leak restricted documents."
+      },
+      {
+        "probe_id": "sec_cypher_hop_limit_overflow",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 400,
+        "actual_status": 400,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 1.69,
+        "description": "Cypher query with 4 hops (>3 hop budget) must be rejected with 400."
+      },
+      {
+        "probe_id": "sec_cypher_reserved_param_injection",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 400,
+        "actual_status": 400,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 1.97,
+        "description": "Query attempting to supply reserved auth_ parameter must be rejected with 400."
+      },
+      {
+        "probe_id": "sec_cypher_mutation_create_injection",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 400,
+        "actual_status": 400,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 1.43,
+        "description": "Cypher CREATE mutation must be rejected with 400."
+      },
+      {
+        "probe_id": "sec_cypher_mutation_delete_injection",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 400,
+        "actual_status": 400,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 1.48,
+        "description": "Cypher DELETE mutation must be rejected with 400."
+      },
+      {
+        "probe_id": "sec_cypher_syntax_escape_sql_injection",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 400,
+        "actual_status": 400,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 1.39,
+        "description": "Cypher query with SQL injection or semicolon statement chaining must be rejected with 400."
+      },
+      {
+        "probe_id": "sec_cypher_unsupported_property_injection",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 400,
+        "actual_status": 400,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 1.63,
+        "description": "Query filtering on non-whitelisted property must be rejected with 400."
+      },
+      {
+        "probe_id": "sec_cypher_or_tautology_leak_probe",
+        "probe_type": "malicious_cypher",
+        "persona": "contractor",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 5.72,
+        "description": "Tautological OR 1=1 must not bypass AST policy conjoining."
+      },
+      {
+        "probe_id": "sec_cypher_cross_tenant_probe",
+        "probe_type": "malicious_cypher",
+        "persona": "vp",
+        "endpoint": "/api/v1/query/cypher",
+        "expected_status": 200,
+        "actual_status": 200,
+        "status_matched": true,
+        "leaked_tokens": [],
+        "passed": true,
+        "latency_ms": 6.84,
+        "description": "VP attempting to filter on other tenant must return 0 rows due to AST predicate rewrite."
+      }
+    ]
+  },
+  "retrieval": {
+    "total_cases": 17,
+    "category_metrics": {
+      "canonical": {
+        "count": 5,
+        "mean_p1": 1.0,
+        "mean_p3": 0.867,
+        "mean_p5": 0.56,
+        "mean_r1": 1.0,
+        "mean_r3": 1.0,
+        "mean_r5": 1.0,
+        "mrr": 1.0,
+        "mean_latency_ms": 10.59
+      },
+      "typo_leetspeak": {
+        "count": 5,
+        "mean_p1": 0.2,
+        "mean_p3": 0.2,
+        "mean_p5": 0.12,
+        "mean_r1": 0.2,
+        "mean_r3": 0.2,
+        "mean_r5": 0.2,
+        "mrr": 0.2,
+        "mean_latency_ms": 12.07
+      },
+      "syntactic_permutation": {
+        "count": 5,
+        "mean_p1": 1.0,
+        "mean_p3": 0.733,
+        "mean_p5": 0.44,
+        "mean_r1": 1.0,
+        "mean_r3": 1.0,
+        "mean_r5": 1.0,
+        "mrr": 1.0,
+        "mean_latency_ms": 10.64
+      },
+      "relational_noise": {
+        "count": 2,
+        "mean_p1": 0.0,
+        "mean_p3": 0.0,
+        "mean_p5": 0.0,
+        "mean_r1": 0.0,
+        "mean_r3": 0.0,
+        "mean_r5": 0.0,
+        "mrr": 0.0,
+        "mean_latency_ms": 10.9
+      }
+    },
+    "degradation": {
+      "canonical_mrr": 1.0,
+      "leetspeak_mrr": 0.2,
+      "permuted_mrr": 1.0,
+      "leetspeak_degradation_pct": 80.0,
+      "permuted_degradation_pct": 0.0
+    },
+    "test_cases": [
+      {
+        "test_id": "ret_apollo_canonical",
+        "category": "canonical",
+        "query": "Who leads Project Apollo and what vendor does it contract for monitoring?",
+        "persona": "contractor",
+        "expected_aliases": [
+          "doc_eng_l1_01"
+        ],
+        "expected_doc_ids": [
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_5fd9cdb653f349479565bdc8273a4cc9",
+          "doc_47a147a313904088b2d2e4fa4eecc518"
+        ],
+        "retrieved_doc_ids": [
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_47a147a313904088b2d2e4fa4eecc518",
+          "doc_5fd9cdb653f349479565bdc8273a4cc9",
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_3784043a9a6842f5ab7fb5fba8553f22"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0492,
+        "top_rerank_score": 0.0592,
+        "latency_ms": 7.52
+      },
+      {
+        "test_id": "ret_apollo_leetspeak",
+        "category": "typo_leetspeak",
+        "query": "Wh0 l3ads Pr0ject Ap0ll0 and wh4t vend0r c0ntracts D4t4d0g?",
+        "persona": "contractor",
+        "expected_aliases": [
+          "doc_eng_l1_01"
+        ],
+        "expected_doc_ids": [
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_5fd9cdb653f349479565bdc8273a4cc9",
+          "doc_47a147a313904088b2d2e4fa4eecc518"
+        ],
+        "retrieved_doc_ids": [],
+        "precision_at_1": 0.0,
+        "precision_at_3": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0,
+        "top_rrf_score": 0.0,
+        "top_rerank_score": 0.0,
+        "latency_ms": 8.41
+      },
+      {
+        "test_id": "ret_apollo_permuted",
+        "category": "syntactic_permutation",
+        "query": "Datadog monitoring telemetry contracts Project Apollo Marcus Vance leads observability",
+        "persona": "contractor",
+        "expected_aliases": [
+          "doc_eng_l1_01"
+        ],
+        "expected_doc_ids": [
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_5fd9cdb653f349479565bdc8273a4cc9",
+          "doc_47a147a313904088b2d2e4fa4eecc518"
+        ],
+        "retrieved_doc_ids": [
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_47a147a313904088b2d2e4fa4eecc518",
+          "doc_5fd9cdb653f349479565bdc8273a4cc9",
+          "doc_4c06b55ac9004861982d9a725eddab39",
+          "doc_87f0ffadf8074335919f9eed12ef0e39"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0492,
+        "top_rerank_score": 0.0692,
+        "latency_ms": 7.61
+      },
+      {
+        "test_id": "ret_apollo_terms_canonical",
+        "category": "canonical",
+        "query": "Project Apollo Datadog payment terms Net-30 monthly pricing commit",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_proc_l4_01"
+        ],
+        "expected_doc_ids": [
+          "doc_a0c545a17efd43a2860aa43c0e087e5b",
+          "doc_5d02dc044dcd41dc8ece207246e6f1da",
+          "doc_04e523ab905848439c9f015a2fdbbc26"
+        ],
+        "retrieved_doc_ids": [
+          "doc_04e523ab905848439c9f015a2fdbbc26",
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_1141550eac37421dbeaca03120843627",
+          "doc_47a147a313904088b2d2e4fa4eecc518",
+          "doc_5fd9cdb653f349479565bdc8273a4cc9"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 0.333,
+        "precision_at_5": 0.2,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0489,
+        "top_rerank_score": 0.0632,
+        "latency_ms": 13.07
+      },
+      {
+        "test_id": "ret_apollo_terms_leetspeak",
+        "category": "typo_leetspeak",
+        "query": "Pr0ject Ap0llo Datad0g p4ym3nt t3rms N3t-30 $75k/m0 pr1c1ng",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_proc_l4_01"
+        ],
+        "expected_doc_ids": [
+          "doc_a0c545a17efd43a2860aa43c0e087e5b",
+          "doc_5d02dc044dcd41dc8ece207246e6f1da",
+          "doc_04e523ab905848439c9f015a2fdbbc26"
+        ],
+        "retrieved_doc_ids": [
+          "doc_chimera_terms",
+          "doc_chimera_vendors"
+        ],
+        "precision_at_1": 0.0,
+        "precision_at_3": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0,
+        "top_rrf_score": 0.0492,
+        "top_rerank_score": 0.0512,
+        "latency_ms": 12.39
+      },
+      {
+        "test_id": "ret_apollo_terms_permuted",
+        "category": "syntactic_permutation",
+        "query": "$75k/mo commit ARR $900k Net-30 Datadog terms payment Project Apollo",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_proc_l4_01"
+        ],
+        "expected_doc_ids": [
+          "doc_a0c545a17efd43a2860aa43c0e087e5b",
+          "doc_5d02dc044dcd41dc8ece207246e6f1da",
+          "doc_04e523ab905848439c9f015a2fdbbc26"
+        ],
+        "retrieved_doc_ids": [
+          "doc_04e523ab905848439c9f015a2fdbbc26",
+          "doc_chimera_terms",
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_1141550eac37421dbeaca03120843627",
+          "doc_47a147a313904088b2d2e4fa4eecc518"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 0.333,
+        "precision_at_5": 0.2,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0489,
+        "top_rerank_score": 0.0689,
+        "latency_ms": 12.65
+      },
+      {
+        "test_id": "ret_artemis_canonical",
+        "category": "canonical",
+        "query": "Elena Rostova Project Artemis Cloudflare edge routing gateway specs",
+        "persona": "contractor",
+        "expected_aliases": [
+          "doc_eng_l1_02"
+        ],
+        "expected_doc_ids": [
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_3784043a9a6842f5ab7fb5fba8553f22",
+          "doc_af725d9f8ad94789a6713e9f9890b44a"
+        ],
+        "retrieved_doc_ids": [
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_3784043a9a6842f5ab7fb5fba8553f22",
+          "doc_af725d9f8ad94789a6713e9f9890b44a",
+          "doc_4c06b55ac9004861982d9a725eddab39",
+          "doc_87f0ffadf8074335919f9eed12ef0e39"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0489,
+        "top_rerank_score": 0.0689,
+        "latency_ms": 7.64
+      },
+      {
+        "test_id": "ret_artemis_leetspeak",
+        "category": "typo_leetspeak",
+        "query": "El3na R0st0va Pr0j3ct Art3m1s Cl0udfl4re 3dge r0ut1ng g4t3way",
+        "persona": "contractor",
+        "expected_aliases": [
+          "doc_eng_l1_02"
+        ],
+        "expected_doc_ids": [
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_3784043a9a6842f5ab7fb5fba8553f22",
+          "doc_af725d9f8ad94789a6713e9f9890b44a"
+        ],
+        "retrieved_doc_ids": [],
+        "precision_at_1": 0.0,
+        "precision_at_3": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0,
+        "top_rrf_score": 0.0,
+        "top_rerank_score": 0.0,
+        "latency_ms": 7.6
+      },
+      {
+        "test_id": "ret_artemis_permuted",
+        "category": "syntactic_permutation",
+        "query": "Cloudflare caching edge DNS resolution Project Artemis leads Elena Rostova",
+        "persona": "contractor",
+        "expected_aliases": [
+          "doc_eng_l1_02"
+        ],
+        "expected_doc_ids": [
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_3784043a9a6842f5ab7fb5fba8553f22",
+          "doc_af725d9f8ad94789a6713e9f9890b44a"
+        ],
+        "retrieved_doc_ids": [
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_3784043a9a6842f5ab7fb5fba8553f22",
+          "doc_af725d9f8ad94789a6713e9f9890b44a",
+          "doc_4c06b55ac9004861982d9a725eddab39",
+          "doc_87f0ffadf8074335919f9eed12ef0e39"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0489,
+        "top_rerank_score": 0.0689,
+        "latency_ms": 7.9
+      },
+      {
+        "test_id": "ret_neuralgrid_canonical",
+        "category": "canonical",
+        "query": "Project Artemis approved acquisition of NeuralGrid neural acceleration",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_mna_l3_02"
+        ],
+        "expected_doc_ids": [
+          "doc_744f6955eb1d44e1b482cfada423632f",
+          "doc_0f85a1503832460f82eb28e4cff2fba8",
+          "doc_d038ad0efd284bdd83679a15a2138079"
+        ],
+        "retrieved_doc_ids": [
+          "doc_0f85a1503832460f82eb28e4cff2fba8",
+          "doc_744f6955eb1d44e1b482cfada423632f",
+          "doc_d038ad0efd284bdd83679a15a2138079",
+          "doc_0108ead41b8c4156977a0aa3a6fc108c",
+          "doc_13c3b30d70824c238fc4f772e6011441"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0487,
+        "top_rerank_score": 0.0687,
+        "latency_ms": 12.27
+      },
+      {
+        "test_id": "ret_neuralgrid_leetspeak",
+        "category": "typo_leetspeak",
+        "query": "Pr0ject Art3m1s appr0ved 4cqu1s1t1on of N3ur4lGr1d 4cceler4t1on",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_mna_l3_02"
+        ],
+        "expected_doc_ids": [
+          "doc_744f6955eb1d44e1b482cfada423632f",
+          "doc_0f85a1503832460f82eb28e4cff2fba8",
+          "doc_d038ad0efd284bdd83679a15a2138079"
+        ],
+        "retrieved_doc_ids": [
+          "doc_06d199b2d0c54f80858ce83b270fa710",
+          "doc_4f9cc2c61ec046acb888edd9fa25ee85",
+          "doc_e22a99573e6442349ae7bf6d88ed709f"
+        ],
+        "precision_at_1": 0.0,
+        "precision_at_3": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0,
+        "top_rrf_score": 0.0328,
+        "top_rerank_score": 0.0395,
+        "latency_ms": 19.82
+      },
+      {
+        "test_id": "ret_neuralgrid_permuted",
+        "category": "syntactic_permutation",
+        "query": "acquiring NeuralGrid approved lead Project Artemis acceleration edge nodes",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_mna_l3_02"
+        ],
+        "expected_doc_ids": [
+          "doc_744f6955eb1d44e1b482cfada423632f",
+          "doc_0f85a1503832460f82eb28e4cff2fba8",
+          "doc_d038ad0efd284bdd83679a15a2138079"
+        ],
+        "retrieved_doc_ids": [
+          "doc_0f85a1503832460f82eb28e4cff2fba8",
+          "doc_744f6955eb1d44e1b482cfada423632f",
+          "doc_d038ad0efd284bdd83679a15a2138079",
+          "doc_13c3b30d70824c238fc4f772e6011441",
+          "doc_0108ead41b8c4156977a0aa3a6fc108c"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0487,
+        "top_rerank_score": 0.0687,
+        "latency_ms": 12.7
+      },
+      {
+        "test_id": "ret_chronos_canonical",
+        "category": "canonical",
+        "query": "Dr Aris Thorne Project Chronos Snowflake compute credits payment terms",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_proc_l4_04",
+          "doc_eng_l4_02"
+        ],
+        "expected_doc_ids": [
+          "doc_ca0fab0214c3489ea0474bd2e3a99336",
+          "doc_8b4b27066cf54e40aec773a3127d6e23",
+          "doc_74ec3e72fa6947e4898e9e10bbf3349d",
+          "doc_07d2d3c08b894c17ae35b04ce3e1d115",
+          "doc_8a5b440cc8644665abc78bbd870f3729",
+          "doc_c604b870e32a4ff797504fcb9098aedd"
+        ],
+        "retrieved_doc_ids": [
+          "doc_74ec3e72fa6947e4898e9e10bbf3349d",
+          "doc_8a5b440cc8644665abc78bbd870f3729",
+          "doc_8b4b27066cf54e40aec773a3127d6e23",
+          "doc_07d2d3c08b894c17ae35b04ce3e1d115",
+          "doc_chimera_terms"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0489,
+        "top_rerank_score": 0.0661,
+        "latency_ms": 12.47
+      },
+      {
+        "test_id": "ret_chronos_leetspeak",
+        "category": "typo_leetspeak",
+        "query": "Dr Ar1s Th0rne Pr0ject Chr0n0s Sn0wfl4ke $95k/m0 c0mput3 cred1ts",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_proc_l4_04",
+          "doc_eng_l4_02"
+        ],
+        "expected_doc_ids": [
+          "doc_ca0fab0214c3489ea0474bd2e3a99336",
+          "doc_8b4b27066cf54e40aec773a3127d6e23",
+          "doc_74ec3e72fa6947e4898e9e10bbf3349d",
+          "doc_07d2d3c08b894c17ae35b04ce3e1d115",
+          "doc_8a5b440cc8644665abc78bbd870f3729",
+          "doc_c604b870e32a4ff797504fcb9098aedd"
+        ],
+        "retrieved_doc_ids": [
+          "doc_74ec3e72fa6947e4898e9e10bbf3349d",
+          "doc_8a5b440cc8644665abc78bbd870f3729",
+          "doc_8b4b27066cf54e40aec773a3127d6e23"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0492,
+        "top_rerank_score": 0.0512,
+        "latency_ms": 12.15
+      },
+      {
+        "test_id": "ret_chronos_permuted",
+        "category": "syntactic_permutation",
+        "query": "Snowflake $95k/mo compute credits capacity $1.14M Chronos payment terms",
+        "persona": "vp",
+        "expected_aliases": [
+          "doc_proc_l4_04"
+        ],
+        "expected_doc_ids": [
+          "doc_ca0fab0214c3489ea0474bd2e3a99336",
+          "doc_c604b870e32a4ff797504fcb9098aedd",
+          "doc_07d2d3c08b894c17ae35b04ce3e1d115"
+        ],
+        "retrieved_doc_ids": [
+          "doc_07d2d3c08b894c17ae35b04ce3e1d115",
+          "doc_74ec3e72fa6947e4898e9e10bbf3349d",
+          "doc_8a5b440cc8644665abc78bbd870f3729",
+          "doc_8b4b27066cf54e40aec773a3127d6e23",
+          "doc_chimera_terms"
+        ],
+        "precision_at_1": 1.0,
+        "precision_at_3": 0.333,
+        "precision_at_5": 0.2,
+        "recall_at_1": 1.0,
+        "recall_at_3": 1.0,
+        "recall_at_5": 1.0,
+        "reciprocal_rank": 1.0,
+        "top_rrf_score": 0.0492,
+        "top_rerank_score": 0.0692,
+        "latency_ms": 12.34
+      },
+      {
+        "test_id": "ret_relational_decoy_01",
+        "category": "relational_noise",
+        "query": "Marcus Vance leads Project Artemis and contracts MongoDB",
+        "persona": "contractor",
+        "expected_aliases": [],
+        "expected_doc_ids": [],
+        "retrieved_doc_ids": [
+          "doc_4c06b55ac9004861982d9a725eddab39",
+          "doc_87f0ffadf8074335919f9eed12ef0e39",
+          "doc_a3a0c2975d2b4f13b6b2afb02c49157a",
+          "doc_018c0a49aab34cd992c544318efe6fbc",
+          "doc_47a147a313904088b2d2e4fa4eecc518"
+        ],
+        "precision_at_1": 0.0,
+        "precision_at_3": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0,
+        "top_rrf_score": 0.0482,
+        "top_rerank_score": 0.0682,
+        "latency_ms": 7.64
+      },
+      {
+        "test_id": "ret_relational_decoy_02",
+        "category": "relational_noise",
+        "query": "Project Nebula approved acquisition of Datadog and contracts Cloudflare",
+        "persona": "vp",
+        "expected_aliases": [],
+        "expected_doc_ids": [],
+        "retrieved_doc_ids": [
+          "doc_4c673100010a4ab7b6838a5eb399dc94",
+          "doc_743fdb7870b6472480f234b0b6fe2157",
+          "doc_1141550eac37421dbeaca03120843627",
+          "doc_9ee543e3352940b790c95711f1d96cc8",
+          "doc_018c0a49aab34cd992c544318efe6fbc"
+        ],
+        "precision_at_1": 0.0,
+        "precision_at_3": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_1": 0.0,
+        "recall_at_3": 0.0,
+        "recall_at_5": 0.0,
+        "reciprocal_rank": 0.0,
+        "top_rrf_score": 0.0475,
+        "top_rerank_score": 0.0575,
+        "latency_ms": 14.17
+      }
+    ]
+  },
+  "latency": {
+    "hybrid_search": {
+      "count": 100,
+      "min": 7.211,
+      "mean": 9.864,
+      "p50": 8.401,
+      "p90": 12.865,
+      "p99": 13.727,
+      "max": 18.837,
+      "stdev": 2.47
+    },
+    "cypher_ast_and_execution": {
+      "count": 100,
+      "min": 5.092,
+      "mean": 6.251,
+      "p50": 5.552,
+      "p90": 7.412,
+      "p99": 8.862,
+      "max": 22.454,
+      "stdev": 1.872
+    },
+    "chat_sse_ttft": {
+      "count": 25,
+      "min": 11.115,
+      "mean": 16.657,
+      "p50": 17.549,
+      "p90": 18.593,
+      "p99": 40.124,
+      "max": 46.418,
+      "stdev": 7.003
+    },
+    "chat_sse_completion": {
+      "count": 25,
+      "min": 28.802,
+      "mean": 42.04,
+      "p50": 45.384,
+      "p90": 47.565,
+      "p99": 68.361,
+      "max": 74.767,
+      "stdev": 9.77
+    },
+    "chat_total_tokens": 3220,
+    "chat_tokens_per_sec": 3063.75
+  }
+}
