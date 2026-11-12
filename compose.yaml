@@ -15,6 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: graphrag-dlp:latest
     container_name: graphrag-dlp-app
     ports:
       - "127.0.0.1:8000:8000"
