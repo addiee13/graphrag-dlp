@@ -51,7 +51,7 @@ flowchart TD
         LocalGraphStore["Real Persistent SQLite Graph Store & Evidence Ledger"]
         Neo4jAdapter["Optional Neo4j Bolt Adapter\n(Read-Only Principal, execute_read, Separate Writer Ingestion)"]
         FlashRankAdapter["Local FlashRank ONNX Adapter\n(Frozen Models / Truthful Lexical Fallback)"]
-        LangGraphAdapter["Optional LangGraph StateGraph Retrieval Stage"]
+        LangGraphAdapter["Optional LangGraph StateGraph (authorized_hybrid_retrieval Node)"]
     end
 
     subgraph GenerationLayer["RAG Generation & Context Assembler"]
@@ -119,7 +119,7 @@ sequenceDiagram
 - **Security Constraint**: Extra fields or arbitrary claims in the token request are strictly rejected with HTTP 422. The server signs fixed, predefined attributes into the token payload:
   - `user_id`: Unique identifier of the actor.
   - `name`: Display name.
-  - `tenant_id`: Mandatory tenant identifier (e.g., `acme` or `other`).
+  - `tenant_id`: Mandatory tenant identifier (`acme` or `other`).
   - `clearance_level`: Integer clearance lattice ($1 = \text{Public}, 2 = \text{Internal}, 3 = \text{Confidential}, 4 = \text{Secret}$).
   - `departments`: List of authorized departmental strings (e.g., `["engineering"]`, `["procurement", "mna"]`).
   - `roles`: Assigned operational roles (e.g., `["reader"]`, `["admin", "ingestor"]`).
@@ -167,13 +167,14 @@ flowchart LR
 The transformer permits a strictly bounded subset of openCypher:
 - **Allowed**: Single fixed `MATCH` pattern with 0–3 relationships, optional parameterized `WHERE` clause (with scalar comparisons, parenthesized `AND`/`OR`/`NOT`), explicit `RETURN` property and variable references, and a positive integer `LIMIT` (default 50, maximum 100).
 - **Rejected (HTTP 400)**:
-  - Mutation clauses: `CREATE`, `MERGE`, `DELETE`, `SET`, `REMOVE`.
+  - Mutation clauses: `CREATE`, `MERGE`, `DELETE`, `SET`, `REMOVE`. Error message: `Unsupported restricted Cypher grammar`.
   - Disallowed query structures: `OPTIONAL MATCH`, `UNION`, `WITH`, `CALL` (stored procedures), `UNWIND`.
   - Aggregation and window functions: `count()`, `collect()`, `sum()`, `avg()`.
   - Query manipulation: `ORDER BY`, `SKIP`.
   - Path variable bindings (e.g., `MATCH p = (a)-[*]->(b)`), comments (`//`), semicolon chaining (`;`), and lists (`IN [...]`).
-  - Variable-length path patterns: e.g., `[:KNOWS*]`, `[:KNOWS*1..3]`. Maximum permitted fixed hop depth is **$\le 3$**.
-  - Arbitrary nested property traversal: only an explicit property allowlist is permitted.
+  - Variable-length path patterns: e.g., `[:KNOWS*]`, `[:KNOWS*1..3]`. Maximum permitted fixed hop depth is **$\le 3$** (`At most three fixed hops supported`).
+  - Arbitrary nested property traversal: only an explicit property allowlist is permitted (`Unbound variable or unsupported property`).
+  - Reserved parameter usage: client parameters using `$auth_*` or `__*` return `Invalid query or reserved parameter namespace`.
 
 #### AST Rewriting Invariants
 1. **Mandatory Variable Binding**: Every node and relationship in the pattern must have a variable. Anonymous elements (e.g., `(p)-[:CONNECTED_TO]->()`) are assigned synthetic variables (e.g., `__n1`, `__r1`).
@@ -236,7 +237,8 @@ In both vector and graph retrieval pipelines, unauthorized candidates are elimin
 #### Truthful Provider Adapters
 - **Default Deterministic Mode**: Zero external dependencies. Uses a real persistent SQLite graph/evidence store and pure-Python TF-IDF sparse cosine vector retrieval.
 - **Neo4j Bolt Adapter**: When configured via `NEO4J_URI`, queries execute using the restricted AST against Neo4j. Local SQLite acts as the authoritative provenance registry. In production environments, Neo4j requests execute with a dedicated read-only database principal. Ingestion and fixture provisioning use separate credentials (`NEO4J_WRITE_USER`). Note that per-user native database RBAC is an Enterprise Edition prerequisite; under Community Edition deployments, enforcement is handled by the application AST layer, and driver-level read routing (`execute_read`) specifies read intent only.
-- **FlashRank ONNX Reranker**: Requires pre-downloaded, frozen ONNX models (`TinyBERT`) in a provisioned directory. If the model is absent, the system truthfully falls back to lexical/RRF rank scoring and reports status via `GET /api/v1/health`. Automatic runtime model downloading is prohibited.
+- **FlashRank ONNX Reranker**: Requires pre-downloaded, frozen ONNX models (`TinyBERT`) in a provisioned directory (`backend/scripts/provision_flashrank.py`). If the model is absent, the system truthfully falls back to lexical/RRF rank scoring and reports status (`fallback_lexical`) via `GET /api/v1/health`. Automatic runtime model downloading is prohibited.
+- **LangGraph Integration**: When enabled with `DLP_LANGGRAPH=1`, executes an actual `StateGraph` containing an `authorized_hybrid_retrieval` node.
 - **Groq LLM Adapter**: Used strictly for prompt answer generation via SSE streaming (never for embeddings). When credentials are unavailable, HTTP transport and streaming protocol are verified via HTTP mock, and health truthfully reports missing credentials without claiming live external execution.
 
 ---

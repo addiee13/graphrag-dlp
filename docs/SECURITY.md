@@ -213,10 +213,10 @@ The test suite validates security invariants against three concrete enterprise d
   - `vp` (Clearance 4, `mna`): Successfully traverses 2-hop pattern; answer confirms Alice approved acquisition of CyberCorp through Project Titan, linking to both grounded source documents.
 
 ### Scenario C: Cross-Tenant Canary Isolation
-- **Context**: Tenant `other` has an administrative user `other_tenant` (Clearance 4).
+- **Context**: Tenant `other` has an administrative user `other_tenant` (Clearance 4) and its own canary record (`doc_other_canary` for `LunarWorks`).
 - **Verified Behavior**:
   - `other_tenant` submits hybrid searches, chat queries, and Cypher queries attempting to discover Project Chimera or Project Titan.
-  - Result: 0 nodes, 0 edges, 0 chunks returned. Total tenant isolation enforced.
+  - Result: 0 Acme documents, 0 Acme nodes, 0 Acme edges returned. Total tenant isolation enforced.
 
 ---
 

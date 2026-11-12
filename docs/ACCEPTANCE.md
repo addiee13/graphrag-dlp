@@ -7,9 +7,11 @@ This document provides formal empirical acceptance evidence for **GraphRAG-DLP**
 All test results, browser automation logs, security invariant validations, and provider status indicators documented herein reflect the actual implemented software in local deterministic mode, supplemented by dedicated mock and fixture verifications for optional external integrations.
 
 - **Verification Date**: November 12, 2026
-- **Test Suite Results**: 74 passed, 4 skipped in 3.02s (`pytest backend/tests/`)
-- **Frontend Test Results**: 11 passed in 3.28s (`vitest run` across 2 test suites)
-- **Quality Script**: `./scripts/check.sh` passed cleanly in 15 seconds (syntax compilation, pytest, TypeScript build, vitest)
+- **Test Suite Results**:
+  - **Default Local Deterministic Mode**: 74 passed, 4 skipped in 1.95s (`pytest backend/tests/`). Zero network, zero API keys, zero external services required.
+  - **Full Optional Provider Suite**: 78 passed in 2.95s when executing with dedicated local Neo4j test container (`NEO4J_TEST_URI`, `NEO4J_TEST_PASSWORD`) and pre-provisioned TinyBERT model directory (`FLASHRANK_TEST_MODEL_DIR`). Recorded in `/Users/addie/repos/firstmate/data/graph-final-evidence.md`.
+- **Frontend Test Results**: 11 passed in 2.83s (`vitest run` across 2 test suites)
+- **Quality Script**: `./scripts/check.sh` passed cleanly in 16 seconds (syntax compilation, pytest, TypeScript build, vitest)
 - **Root Browser Evidence**: Conducted via Chrome DevTools protocol (`chrome-devtools-axi`) against live services at `http://127.0.0.1:5173` and `http://127.0.0.1:8000`.
 
 ---
@@ -18,6 +20,7 @@ All test results, browser automation logs, security invariant validations, and p
 
 ### 2.1 Backend Pytest Suite Summary
 
+#### Default Local Mode Run:
 ```text
 ============================= test session starts ==============================
 platform darwin -- Python 3.13.5, pytest-9.2.0, pluggy-1.7.0
@@ -33,8 +36,18 @@ backend/tests/test_security.py ......................................... [ 65%]
 =========================== short test summary info ============================
 SKIPPED [3] backend/tests/test_adapters.py: Release worker supplies bounded Neo4j integration service
 SKIPPED [1] backend/tests/test_adapters.py: Explicit frozen local TinyBERT model not provisioned
-======================== 74 passed, 4 skipped in 3.02s =========================
+======================== 74 passed, 4 skipped in 1.95s =========================
 ```
+
+#### Full Optional-Provider Run (Evidence Receipt):
+When running with provisioned test environment variables:
+```sh
+FLASHRANK_TEST_MODEL_DIR=/Users/addie/repos/firstmate/data/gr-backend/models \
+NEO4J_TEST_URI=bolt://127.0.0.1:7687 \
+NEO4J_TEST_PASSWORD='<dedicated-local-test-password>' \
+uv run --extra test --extra providers pytest backend/tests/ -q
+```
+Result: **78 passed in 2.95s**. Exercises Neo4j ABAC parity, runtime chat graph, separate writer indexing, frozen TinyBERT offline inference (forbidding network downloads), and LangGraph StateGraph.
 
 ### 2.2 Acceptance Checklist Mapping to Concrete Pytest Cases
 
@@ -43,14 +56,14 @@ SKIPPED [1] backend/tests/test_adapters.py: Explicit frozen local TinyBERT model
 | **AUTH-01** | `test_claim_injection` | `PASSED` | `POST /api/v1/auth/token` with extra claims (`clearance_level: 4`, `tenant_id`, `departments`) returns **HTTP 422**. |
 | **AUTH-02** | `test_identities_and_claims` | `PASSED` | `GET /api/v1/auth/identities` returns 5 fixed identities; tokens mint exact fixed claims without trusting client inputs. |
 | **AUTH-03** | `test_jwt_rejections` | `PASSED` | Rejects expired tokens, forged signatures, invalid audiences, incorrect issuers, `alg: none`, and future `nbf`. |
-| **SEC-01** | `test_unsupported_rejected` | `PASSED` | Submitting `MATCH (n) DELETE n RETURN n` returns HTTP 400 (`CYPHER_DISALLOWED_OPERATION`). |
+| **SEC-01** | `test_unsupported_rejected` | `PASSED` | Submitting `MATCH (n) DELETE n RETURN n` returns HTTP 400 (`Unsupported restricted Cypher grammar`). |
 | **SEC-02** | `test_unsupported_rejected` | `PASSED` | Submitting `OPTIONAL MATCH`, `UNION`, `WITH`, `CALL`, `ORDER BY`, `SKIP`, `count()`, comments `//`, or `;` returns HTTP 400. |
 | **SEC-03** | `test_anonymous_and_bounds` | `PASSED` | Submitting unbounded `MATCH (n) RETURN n` injects default `LIMIT 50` (capped at max 100). |
 | **SEC-04** | `test_anonymous_and_bounds` | `PASSED` | Anonymous pattern nodes/edges are assigned synthetic identifiers (`__n*`, `__r*`) and bound to security predicates. |
-| **SEC-05** | `test_unsupported_rejected` | `PASSED` | Submitting 4-hop query returns HTTP 400; hops strictly bounded to $\le 3$. |
+| **SEC-05** | `test_unsupported_rejected` | `PASSED` | Submitting 4-hop query returns HTTP 400 (`At most three fixed hops supported`); hops strictly bounded to $\le 3$. |
 | **SEC-06** | `test_or_precedence_and_parameterization` | `PASSED` | User query `WHERE 1=1 OR n.name = 'AWS'` rewritten to `((1=1) OR (n.name = $__literal_0)) AND (SecurityPredicates)`. |
-| **SEC-07** | `test_reserved_parameters` | `PASSED` | Client parameters containing `$auth_*` or `$__literal_*` return HTTP 400 (`Reserved parameter name`). |
-| **ABAC-01** | `test_terms_policy_all_surfaces[other_tenant-False]` | `PASSED` | `other_tenant` JWT returns 0 documents, 0 nodes, 0 search hits; total tenant isolation. |
+| **SEC-07** | `test_reserved_parameters` | `PASSED` | Client parameters containing `$auth_*` or `$__literal_*` return HTTP 400 (`Invalid query or reserved parameter namespace`). |
+| **ABAC-01** | `test_terms_policy_all_surfaces[other_tenant-False]` | `PASSED` | `other_tenant` JWT returns zero Acme documents, nodes, or search hits; total tenant isolation. |
 | **ABAC-02** | `test_terms_policy_all_surfaces[contractor-False]` | `PASSED` | `contractor` (Clearance 1) sees AWS/Snowflake vendors; payment terms omitted; no existence hints. |
 | **ABAC-03** | `test_terms_policy_all_surfaces[vp-True]` | `PASSED` | `vp` (Clearance 4) sees AWS $40k/mo Net-30 and Snowflake $15k/mo Net-60 with grounded citations. |
 | **ABAC-04** | `test_two_hop_approval` | `PASSED` | `engineer` (Clearance 2) querying Alice approval cannot traverse to Project Titan acquisition (blocked at L3). |
@@ -63,7 +76,7 @@ SKIPPED [1] backend/tests/test_adapters.py: Explicit frozen local TinyBERT model
 | **PROV-03** | `test_chimera_question_graph_has_only_contributing_project` | `PASSED` | Chimera question returns only Chimera contributing graph elements; unrelated Titan/Alice nodes excluded. |
 | **ADAPT-01** | `test_groq_http_mock_context_only_authorized` | `PASSED` | Groq adapter verifies HTTP transport, token streaming, and authorized-only context passing via mock. |
 | **ADAPT-02** | `test_groq_invalid_model_and_http_failure` | `PASSED` | Unsupported Groq model or upstream HTTP 500 fails gracefully without leaking context. |
-| **ADAPT-03** | `test_real_optional_langgraph` | `PASSED` | LangGraph StateGraph executes actual multi-node retrieval graph when `DLP_LANGGRAPH=1`. |
+| **ADAPT-03** | `test_real_optional_langgraph` | `PASSED` | LangGraph StateGraph executes single `authorized_hybrid_retrieval` node when `DLP_LANGGRAPH=1`. |
 | **ADAPT-04** | `test_flashrank_runtime_missing_model_truthful_fallback` | `PASSED` | Missing FlashRank model directory truthfully falls back to lexical ranking and reports truthful status. |
 | **SYS-01** | `test_restart_persists_policy_and_evidence` | `PASSED` | Restarting store against persistent SQLite retains all documents, facts, and HMAC signatures. |
 | **SYS-02** | `test_rotation_separate_provenance_key` | `PASSED` | Rotating JWT signing key does not invalidate stored HMAC provenance signatures. |
@@ -90,10 +103,10 @@ Root browser verification was conducted using Chrome DevTools MCP (`chrome-devto
    - **Citations**: Grounded citations linking to procurement contracts.
 3. **Identity Switch State Reset**:
    - Switching persona from `vp` to `contractor` triggers immediate state purge:
-     - `hasAmount = false`
-     - `hasOldAnswer = false`
-     - `hasEmptyGraph = true`
-   - Verified that high-clearance data does not linger in browser DOM or memory across persona transitions.
+     - `hasAmount = false` (DOM check)
+     - `hasOldAnswer = false` (DOM check)
+     - `hasEmptyGraph = true` (DOM check)
+   - Verified that high-clearance data does not linger in browser DOM elements or state across persona transitions.
 4. **Multi-Hop Traversal (Alice Titan CyberCorp)**:
    - **Identity**: `vp`.
    - **Question**: *"Which company did Alice approve for acquisition?"*
@@ -103,7 +116,7 @@ Root browser verification was conducted using Chrome DevTools MCP (`chrome-devto
 5. **Cross-Tenant Canary Isolation**:
    - **Identity**: `other_tenant` (`other` tenant).
    - **Query**: Chimera vendors and payment terms.
-   - **Rendered Output**: Truthfully reports answer unavailable; returns 0 citations and empty graph canvas. Zero cross-tenant data leakage.
+   - **Rendered Output**: Truthfully reports answer unavailable; returns 0 citations and empty graph canvas. Zero Acme documents or nodes returned.
 6. **Dynamic Ingestion Proof Beyond Fixed Seed**:
    - **Identity**: `admin`.
    - **Ingestion via UI**: Added two completely fresh documents:
@@ -126,13 +139,13 @@ Root browser verification was conducted using Chrome DevTools MCP (`chrome-devto
 - Tampered JWT payload (Clearance altered from 1 to 4 with original signature): Returns **HTTP 401 Unauthorized**.
 - `POST /api/v1/auth/token` with extra body attribute `clearance_level: 4`: Returns **HTTP 422 Unprocessable Entity**.
 
-### 3.3 Visual Evidence Log & Defect Artifacts
+### 3.3 Visual Evidence Log & Final Screen Captures
 
-- `root-qa/contractor-desktop.png`: Retained as early defect evidence showing initial lexical overlap before entity anchoring was applied.
-- `root-qa/vp-desktop.png`: Retained as early defect evidence prior to final relevance tuning.
-- `root-qa/contractor-mobile390.png`: Visual evidence of initial mobile layout at 390px viewport.
-- `root-qa/contractor-fixed-mobile.png`: Verified final responsive mobile UI for contractor persona.
-- `root-qa/alice-mobile.png`: Verified mobile multi-hop retrieval and Query Inspector rendering.
+Verified final screen captures are stored in `docs/evidence/`:
+- `docs/evidence/contractor-mobile.png`: Verified final responsive mobile UI for contractor persona at 390px viewport.
+- `docs/evidence/alice-multihop-mobile.png`: Verified mobile multi-hop retrieval and Query Inspector rendering.
+
+*(Note: Early screen captures `contractor-desktop.png` and `vp-desktop.png` in external QA storage represent pre-relevance-fix defect states and are deliberately excluded from final evidence).*
 
 ---
 
@@ -140,9 +153,9 @@ Root browser verification was conducted using Chrome DevTools MCP (`chrome-devto
 
 | Component | Operational Status | Evidence & Verification Notes |
 |---|---|---|
-| **Local Deterministic Mode** | **ACTIVE & VERIFIED** | Pure SQLite store, TF-IDF cosine vector matching, deterministic extractive synthesis, Lark AST rewriter. 100% offline, zero internet/API keys required. |
-| **Neo4j Bolt Database** | **CONFIGURED & TESTED** | `Neo4jAdapter` implements restricted AST execution, timeout deadlines (3s), and server-bound entity sets. Ingestion uses separate writer principal (`NEO4J_WRITE_USER`). Verified against bounded Docker Neo4j fixture. |
+| **Local Deterministic Mode** | **ACTIVE & VERIFIED** | Pure SQLite store, TF-IDF cosine vector matching, deterministic extractive synthesis, Lark AST rewriter. 100% offline, zero internet/API keys required. 74 passed, 4 skipped in default test run. |
+| **Neo4j Bolt Database** | **CONFIGURED & TESTED** | `Neo4jAdapter` implements restricted AST execution, timeout deadlines (3s), and server-bound entity sets. Ingestion uses separate writer principal (`NEO4J_WRITE_USER`). Verified against bounded Docker Neo4j fixture. All 78 tests pass with container enabled. |
 | **Groq LLM Streaming** | **HTTP MOCK VERIFIED** | Real streaming protocol, SSE parser, and authorized-only context passing verified via HTTP mock. Health endpoint truthfully reports missing live key without false claiming live cloud execution. |
-| **FlashRank ONNX Reranker** | **FALLBACK VERIFIED** | Requires provisioned TinyBERT model directory (`backend/scripts/provision_flashrank.py`). In the absence of frozen models, truthfully falls back to lexical/RRF ranking without runtime network downloads. |
-| **LangGraph Pipeline** | **VERIFIED** | Real `StateGraph` integration tested when installed via `uv sync --extra providers` and enabled with `DLP_LANGGRAPH=1`. |
-| **Frontend Portal** | **ACTIVE & VERIFIED** | React 19 + TypeScript + Cytoscape.js compiled and tested cleanly with 11 Vitest assertions passing. |
+| **FlashRank ONNX Reranker** | **FALLBACK & INFERENCE VERIFIED** | Requires provisioned TinyBERT model directory (`backend/scripts/provision_flashrank.py`). In the absence of frozen models, truthfully falls back to lexical/RRF ranking without runtime network downloads. When models are present, offline inference passes with HTTP forbidden. |
+| **LangGraph Pipeline** | **VERIFIED** | Real `StateGraph` integration with single `authorized_hybrid_retrieval` node tested when installed via `uv sync --extra providers` and enabled with `DLP_LANGGRAPH=1`. |
+| **Frontend Portal** | **ACTIVE & VERIFIED** | React 19 + TypeScript + Cytoscape.js compiled and tested cleanly with 11 Vitest assertions passing. Single-origin serving verified via production runner. |

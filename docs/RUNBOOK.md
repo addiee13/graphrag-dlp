@@ -15,17 +15,28 @@ This runbook covers local development, quality verification, configuration param
 - **Node.js**: Version 20+ LTS
 - **Package Managers**: `uv` (for Python dependency management) and `npm` (for frontend)
 
-### 2.2 Starting the Backend Service
+### 2.2 Development Environment Execution
 
-1. Synchronize locked Python dependencies:
+The project provides an automated development script (`scripts/dev.sh`) that starts both the FastAPI backend (`http://127.0.0.1:8000`) and the Vite frontend (`http://127.0.0.1:5173`) with automatic proxying and clean signal trapping:
+
+```sh
+./scripts/dev.sh
+```
+
+Alternatively, start services individually:
+
+1. **Backend**:
    ```sh
    uv sync --locked --extra test
-   ```
-2. Run the FastAPI application with Uvicorn:
-   ```sh
    uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
    ```
-3. Verify health status:
+2. **Frontend**:
+   ```sh
+   (cd frontend && npm ci)
+   (cd frontend && npm run dev)
+   ```
+
+3. **Verify Health Endpoint**:
    ```sh
    curl -s http://127.0.0.1:8000/api/v1/health | jq .
    ```
@@ -41,17 +52,18 @@ This runbook covers local development, quality verification, configuration param
    }
    ```
 
-### 2.3 Starting the Frontend Portal
+### 2.3 Single-Origin Production Serving
 
-1. Install frontend dependencies using the committed lockfile:
-   ```sh
-   (cd frontend && npm ci)
-   ```
-2. Launch Vite development server:
-   ```sh
-   (cd frontend && npm run dev)
-   ```
-3. Open `http://localhost:5173` in a modern web browser.
+For unified production hosting where FastAPI serves both API endpoints and the precompiled React single-page application from a single port:
+
+```sh
+# 1. Build frontend distribution assets
+(cd frontend && npm run build)
+
+# 2. Launch production server
+./scripts/start.sh
+```
+The application will be accessible at `http://127.0.0.1:8000`.
 
 ---
 
@@ -75,17 +87,26 @@ GraphRAG-DLP includes a single, serial, bounded quality validation script (`./sc
 
 ### 3.2 Individual Test Executions
 
-- **Backend Pytest Suite**:
+- **Backend Pytest Suite (Default Local Mode)**:
   ```sh
   uv run pytest backend/tests/ -v
   ```
-  *Baseline result*: 74 passed, 4 skipped in ~3.0s.
+  *Baseline result*: 74 passed, 4 skipped in ~2.0s.
+
+- **Full Optional Provider Test Suite**:
+  ```sh
+  FLASHRANK_TEST_MODEL_DIR=/path/to/models \
+  NEO4J_TEST_URI=bolt://127.0.0.1:7687 \
+  NEO4J_TEST_PASSWORD='<password>' \
+  uv run --extra test --extra providers pytest backend/tests/ -q
+  ```
+  *Result*: 78 passed in ~3.0s.
 
 - **Frontend Vitest Suite**:
   ```sh
   (cd frontend && npm test -- --run)
   ```
-  *Baseline result*: 2 test suites, 11 tests passed in ~3.3s.
+  *Baseline result*: 2 test suites, 11 tests passed in ~3.0s.
 
 ---
 
@@ -95,13 +116,13 @@ All settings can be supplied via environment variables or a `.env` file at the r
 
 | Variable | Default Value | Description |
 |---|---|---|
-| `APP_ENV` | `development` | Deployment environment (`development` or `production`). In `production`, demo token and identity endpoints are strictly disabled. |
-| `DLP_DB_PATH` | `backend/data/graphrag.db` | Filesystem path for the persistent SQLite database. Created with mode 0600. |
-| `JWT_SECRET` | *(auto-generated)* | Development HMAC signing key. In local mode, persisted atomically to `backend/data/jwt.key` with permissions `0600`. |
+| `APP_ENV` | `demo` | Deployment environment (`demo`, `development`, or `production`). In `production`, demo token and identity endpoints are strictly disabled. Strict unknown values fail fast on startup. |
+| `DLP_DB_PATH` | `backend/data/graph.sqlite3` | Filesystem path for the persistent SQLite database. Created with mode 0600. |
+| `JWT_SECRET` | *(auto-generated)* | Development HMAC signing key. In local mode, persisted atomically to `backend/data/graph.sqlite3.key` with permissions `0600`. |
 | `JWT_JWKS_URL` | `None` | Production HTTPS endpoint for IdP JSON Web Key Sets (JWKS). Required when `APP_ENV=production`. |
-| `JWT_ALGORITHM` | `HS256` | JWT algorithm (`HS256` for local dev, `RS256` or `ES256` for production JWKS). |
-| `JWT_ISSUER` | `None` | Validated JWT `iss` claim. |
-| `JWT_AUDIENCE` | `None` | Validated JWT `aud` claim. |
+| `JWT_ALGORITHM` | `RS256` | JWT algorithm (`HS256` for local dev, `RS256` or `ES256` for production JWKS). |
+| `JWT_ISSUER` | `graphrag-dlp-demo` | Validated JWT `iss` claim. |
+| `JWT_AUDIENCE` | `graphrag-dlp` | Validated JWT `aud` claim. |
 | `NEO4J_URI` | `None` | Bolt URI for external Neo4j database (e.g. `bolt://127.0.0.1:7687`). |
 | `NEO4J_USER` | `None` | Read-only database principal used for query execution. |
 | `NEO4J_PASSWORD` | `None` | Password for the read-only Neo4j principal. |
@@ -109,7 +130,7 @@ All settings can be supplied via environment variables or a `.env` file at the r
 | `NEO4J_WRITE_PASSWORD` | `None` | Password for the provisioning/ingestion writer. |
 | `GROQ_API_KEY` | `None` | API key for Groq inference provider. |
 | `GROQ_MODEL` | `llama-3.3-70b-versatile` | Supported Groq model (`llama-3.3-70b-versatile` or `llama-3.1-8b-instant`). |
-| `DLP_LANGGRAPH` | `0` | Set to `1` to activate LangGraph StateGraph retrieval pipeline (requires `providers` extra). |
+| `DLP_LANGGRAPH` | `0` | Set to `1` to activate LangGraph StateGraph retrieval stage (requires `providers` extra). |
 | `FLASHRANK_MODEL_DIR` | `None` | Directory path containing pre-provisioned, frozen TinyBERT ONNX model files. |
 
 ---
@@ -118,14 +139,14 @@ All settings can be supplied via environment variables or a `.env` file at the r
 
 GraphRAG-DLP separates authentication signing keys from evidence provenance keys:
 
-1. **Authentication Key (`backend/data/jwt.key`)**:
+1. **Authentication Key (`backend/data/*.key`)**:
    - Used for signing local demo tokens in development.
    - Initialized via atomic file creation (`mkstemp` + `os.link`) with mode `0600`.
-2. **Provenance HMAC Key (`backend/data/graphrag.db.provenance-key`)**:
+2. **Provenance HMAC Key (`backend/data/*.provenance-key`)**:
    - Protects classification levels, departments, and tenant policy labels against SQLite offline tampering.
    - Initialized with mode `0600`.
    - **Key Rotation**: Rotating the JWT authentication signing key does not invalidate stored provenance signatures.
-3. **Database Files (`backend/data/graphrag.db`)**:
+3. **Database Files (`backend/data/graph.sqlite3`)**:
    - Persistent SQLite file containing documents, graph entities, edges, chunks, and audit hashes.
    - Directory permissions should be restricted to the operating system user running the backend process (`chmod 700 backend/data`).
 
@@ -169,15 +190,15 @@ To prevent unexpected network egress or non-deterministic downloads in air-gappe
    ```sh
    export FLASHRANK_MODEL_DIR="backend/data/models"
    ```
-3. If `FLASHRANK_MODEL_DIR` is not set or the directory is missing, the system gracefully and truthfully falls back to pure lexical/RRF ranking without raising exceptions or downloading files at runtime.
+3. If `FLASHRANK_MODEL_DIR` is not set or the directory is missing, the system gracefully and truthfully falls back to pure lexical/RRF ranking (`fallback_lexical`) without raising exceptions or downloading files at runtime.
 
 ---
 
 ## 7. Operational Troubleshooting & Common Defect States
 
 ### 7.1 Cypher Query Rejected (HTTP 400)
-- **Symptom**: `{"detail": "CYPHER_DISALLOWED_OPERATION: ..."}`
-- **Cause**: Query attempted an unsupported operation (mutations, `CALL`, `OPTIONAL MATCH`, `UNION`, `WITH`, aggregations, `ORDER BY`, or comments).
+- **Symptom**: `{"detail": "Unsupported restricted Cypher grammar"}` or `{"detail": "Invalid query or reserved parameter namespace"}`
+- **Cause**: Query attempted an unsupported operation (mutations, `CALL`, `OPTIONAL MATCH`, `UNION`, `WITH`, aggregations, `ORDER BY`, comments `//`, or parameter shadowing).
 - **Remedy**: Constrain queries to single fixed `MATCH` patterns with $\le 3$ hops, standard property comparisons, and explicit `RETURN` variable lists.
 
 ### 7.2 Extra Fields in Token Request (HTTP 422)
