@@ -1,0 +1,77 @@
+# ==============================================================================
+# GraphRAG-DLP Docker Compose Specification
+# ==============================================================================
+# Default execution: docker compose up -d app
+# Neo4j profile:     docker compose --profile neo4j up -d
+#
+# Isolation & Bounding:
+#   - Default app runs in zero-key offline deterministic mode (no DB required)
+#   - Neo4j profile bounded to 512MiB heap + 128MiB pagecache (max 1GiB memory)
+#   - All ports bound strictly to host loopback (127.0.0.1)
+# ==============================================================================
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: graphrag-dlp-app
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      - APP_ENV=demo
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DLP_DB_PATH=/app/data/graph.sqlite3
+      - JWT_ISSUER=graphrag-dlp-demo
+      - JWT_AUDIENCE=graphrag-dlp
+      - JWT_ALGORITHM=HS256
+      # Optional Neo4j adapter: unset by default for zero-key local operation.
+      # To enable with the neo4j profile, provide NEO4J_URI in your .env
+      - NEO4J_URI=${NEO4J_URI:-}
+      - NEO4J_USER=${NEO4J_USER:-}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD:-}
+      - NEO4J_DATABASE=${NEO4J_DATABASE:-}
+    volumes:
+      - dlp_data:/app/data
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c 'import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8000/api/v1/health\")'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: graphrag-dlp-neo4j
+    profiles:
+      - neo4j
+    ports:
+      - "127.0.0.1:7474:7474"
+      - "127.0.0.1:7687:7687"
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH:-neo4j/graphrag_password_local}
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_server_memory_heap_initial__size=512m
+      - NEO4J_server_memory_heap_max__size=512m
+      - NEO4J_server_memory_pagecache_size=128m
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p ${NEO4J_PASSWORD:-graphrag_password_local} 'RETURN 1' >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+volumes:
+  dlp_data:
+    name: graphrag_dlp_data
+  neo4j_data:
+    name: graphrag_dlp_neo4j_data
