@@ -1,0 +1,36 @@
+# GraphRAG-DLP backend
+
+Run from the repository root:
+
+```sh
+uv sync --locked --extra test
+uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
+uv run pytest -q
+```
+
+The default is a real persistent SQLite graph/evidence store and sparse TF-IDF cosine retrieval, lexical matching, fixed three-hop graph expansion, reciprocal rank fusion and local overlap reranking. Answers are deterministic extracts with citations, not a simulated language model. Data and separate JWT/provenance signing keys live under `backend/data/` (ignored by Git); keys are created with mode 0600. Set `DLP_DB_PATH` to persist elsewhere. JWT signing key rotation does not invalidate the independent provenance key.
+
+API routes are `/api/v1/health`, `/auth/identities`, `/auth/token`, `/ingest`, `/documents`, `/sources/{document_id}`, `/query/cypher`, `/search/hybrid`, `/chat`, `/graph/subgraph`, all under `/api/v1`. Only health and demo identity/token routes are unauthenticated. Login accepts exactly `{"identity_id":"contractor|engineer|vp|admin|other_tenant"}`; any extra claim field is rejected. Bearer signature, pinned algorithm, issuer, audience, expiration and not-before are checked. `APP_ENV=production` disables both demo routes and requires HTTPS `JWT_JWKS_URL`, `JWT_ALGORITHM=RS256` or `ES256`, and the intended `JWT_ISSUER`/`JWT_AUDIENCE`.
+
+The closed Lark grammar accepts one `MATCH` with 0–3 fixed named or compiler-named relationships, optional scalar comparisons and parenthesized `AND`/`OR`/`NOT`, explicit variable/property `RETURN`, and a positive integer `LIMIT` (default50/max100). Labels, relation types and variables are parsed identifiers. Scalar string/numeric literals become compiler-owned bound parameters. Only a fixed scalar property allowlist is supported; projections cannot read arbitrary nested properties. It rejects paths, variable-length hops, comments, aggregates, aliases, lists, `OPTIONAL`, multiple patterns, procedures, mutations and all unsupported grammar. Client parameters cannot use `auth_` or `__` namespaces. Rewritten policy is represented by typed conjunction/policy AST nodes and then serialized. Every node and relationship checks tenant, explicit department, clearance and *all* source evidence, including source content hash and HMAC-protected policy. Missing labels or provenance fail closed. Public/shared must be explicit department markers; NULL does not grant access.
+
+Local traversal stops at10,000 expansions/250ms. Neo4j uses the same local preflight plus a3s transaction deadline and fixed paths; LIMIT is a result bound, not the sole expansion control. Source IDs and complete allowed entity ID sets are server-bound immediately before execution. Denied/absent sources both return404. Client metadata contains no blocked counts or secret existence hints. Audit records contain tenant/user, operation and query fingerprint, never raw queries, context or redacted names, and have no client audit endpoint.
+
+Authenticated `admin`/`ingestor` ingestion persists content, policy, SHA-256/HMAC and evidence lineage. Tenant derives from the token, supplied labels must be within its entitlements, and document text cannot change policy. Deterministic extraction supports `Nora leads Project Orion`, `Project Orion is acquiring ApexLabs`, `The lead of Project Orion approved acquisition of ApexLabs`, and `Project Orion contracts VendorName`. Every ingested document is independently searchable even when no supported fact sentence is recognized. Entity keys include tenant and policy labels; sources of different labels are never silently merged into public entities. One bounded document is one evidence chunk (max100,000 characters). Source URIs are labels: the service never fetches them. Imported instructions remain untrusted data; a conservative instruction-pattern quarantine additionally excludes obvious prompt injections from generation evidence. This quarantine is not a universal injection classifier. The confidentiality boundary is authorization before context assembly, not a claim that an external model cannot hallucinate.
+
+Chat executes graph plans through the common policy executor, anchors recognized entities to avoid unrelated projects, streams SSE metadata/token/citation/graph_update/done, and emits only contributing permitted source graph elements. Alice's approval answer requires both the Titan leadership and acquisition evidence. An engineer can see leadership but not the level3 acquisition; the VP can see both and Chimera's level4 procurement terms. Other tenant evidence stays isolated.
+
+Optional providers are explicit:
+
+- `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD` enable actual Neo4j reads with SQLite as the provenance registry. Set separate `NEO4J_WRITE_USER`/`NEO4J_WRITE_PASSWORD` for the provisioning driver; startup and authenticated ingestion automatically index persisted graph facts. The request read driver never issues writes. Without a configured writer, or if indexing fails, ingestion returns `graph_indexing: "pending"` and retains an indexing job; the next configured startup/ingestion retries outstanding records. Local mode returns `indexed` immediately. `Neo4jAdapter.sync_fixture` is a development/test helper only. Deploy with a read-only database principal and restricted procedures; `execute_read` only specifies routing intent and does not grant read-only security. Never use the provisioning principal in production requests.
+- `GROQ_API_KEY` and supported `GROQ_MODEL` (`llama-3.3-70b-versatile` or `llama-3.1-8b-instant`) enable real provider SSE streaming. Groq receives only authorized evidence and is the answer provider, not an embedding service. No credentials were available for live verification; HTTP transport/stream and safe context are tested with an explicit mock. Health says configured, not live-verified.
+- `uv sync --locked --extra providers` installs optional LangGraph and FlashRank. `DLP_LANGGRAPH=1` executes an actual StateGraph retrieval stage (tested installed). `FLASHRANK_MODEL_DIR` requires a frozen, already provisioned model directory containing the selected TinyBERT ONNX file and validated frozen hash manifest. Explicit online provisioning: `uv run --extra providers python backend/scripts/provision_flashrank.py --cache-dir /path/to/models`. No automatic model download occurs in default mode; absent configuration truthfully reports lexical fallback. Actual frozen TinyBERT inference is exercised by `FLASHRANK_TEST_MODEL_DIR=/path/to/models uv run --extra providers pytest -q`; that test prohibits HTTP model downloads.
+
+Actual Neo4j acceptance against the release worker's bounded dedicated Docker service:
+
+```sh
+NEO4J_TEST_URI=bolt://127.0.0.1:7687 \
+NEO4J_TEST_PASSWORD='<dedicated-local-test-password>' uv run pytest -q
+```
+
+The integration fixture writes only the dedicated test graph, resets known fixture records and deliberately tampers relationships to check fail-closed behavior. Do not run it against production. Tests cover fixed identities, JWT forgery/expiration/claims, cross-tenant and department policies, provenance corruption, unsupported Cypher, precedence and literal parameters, multihop approval, arbitrary ingestion, restart/key rotation, source anti-oracles, relevant citations/graphs, injected documents, provider mocks and actual Neo4j parity.
