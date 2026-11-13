@@ -47,6 +47,7 @@ data/
 models/
 modelcache/
 .cache/
+scripts/cache/
 
 # Neo4j & Container runtime mounts
 neo4j/

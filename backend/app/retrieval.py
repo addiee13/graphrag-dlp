@@ -3,8 +3,47 @@ from collections import Counter
 import math
 import re
 
+LEET_MAP = {
+    '@': 'a',
+    '4': 'a',
+    '3': 'e',
+    '1': 'i',
+    '0': 'o',
+    '5': 's',
+    '7': 't',
+}
+
 def terms(text):
-    return re.findall(r"[a-z0-9]+", text.lower())
+    raw_tokens = re.findall(r"[a-z0-9@$]+", text.lower())
+    results = []
+    for tok in raw_tokens:
+        sub_words = re.findall(r"[a-z0-9]+", tok)
+        results.extend(sub_words)
+        is_pure_num = tok.isdigit() or (tok.startswith("$") and tok[1:].replace(".", "", 1).isdigit())
+        if not is_pure_num and any(c in tok for c in LEET_MAP):
+            decoded = tok.lstrip("$")
+            for k, v in LEET_MAP.items():
+                decoded = decoded.replace(k, v)
+            for dw in re.findall(r"[a-z0-9]+", decoded):
+                if dw not in results:
+                    results.append(dw)
+    return results
+
+def levenshtein(s1: str, s2: str) -> int:
+    if len(s1) < len(s2):
+        return levenshtein(s2, s1)
+    if len(s2) == 0:
+        return len(s1)
+    prev = list(range(len(s2) + 1))
+    for i, c1 in enumerate(s1):
+        curr = [i + 1]
+        for j, c2 in enumerate(s2):
+            insertions = prev[j + 1] + 1
+            deletions = curr[j] + 1
+            substitutions = prev[j] + (c1 != c2)
+            curr.append(min(insertions, deletions, substitutions))
+        prev = curr
+    return prev[-1]
 
 STOPWORDS = {"a", "an", "the", "what", "which", "who", "is", "are", "of", "for", "to", "and", "or", "in", "did", "does", "how", "tell", "me", "about", "project", "company", "payment", "terms", "vendor", "vendors", "approved", "acquisition", "acquiring", "lead", "leads"}
 
@@ -14,7 +53,15 @@ def search(store, claims, query, top_k=5, graph_view=None):
     q = Counter(t for t in terms(query) if t not in STOPWORDS)
     if not q: q = Counter(terms(query))
     # Entity anchors prevent generic words such as 'project' retrieving unrelated projects.
-    hits = {n["id"] for n in nodes.values() if (set(terms(n["name"])) - STOPWORDS) & set(q)}
+    node_name_terms = {n["id"]: set(terms(n["name"])) - STOPWORDS for n in nodes.values()}
+    hits = {nid for nid, nterms in node_name_terms.items() if nterms & set(q)}
+    if not hits:
+        q_words = [w for w in q if len(w) >= 4 and not w.isdigit()]
+        for nid, nterms in node_name_terms.items():
+            for nt in nterms:
+                if len(nt) >= 4 and any(abs(len(nt) - len(qw)) <= 2 and levenshtein(nt, qw) <= (1 if len(nt) <= 5 else 2) for qw in q_words):
+                    hits.add(nid)
+                    break
     anchored = bool(hits)
     visited = set(hits); evidence = set()
     for _ in range(3):
